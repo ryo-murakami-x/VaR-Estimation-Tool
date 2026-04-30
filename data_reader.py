@@ -14,13 +14,17 @@ class StooqDataReader:
     A class to read and parse Stooq CSV files containing TSE stock data.
     """
     
-    def __init__(self, data_base_path: str = "/Users/ryo_murakami/CodingProject/AIProject/AI_VaRsystem_dev_test/data/daily/jp/tse stocks"):
+    def __init__(self, data_base_path: Optional[str] = None):
         """
         Initialize the data reader with the base path to stock data.
         
         Args:
             data_base_path (str): Base path to the data directory
         """
+        if data_base_path is None:
+            project_root = Path(__file__).resolve().parent
+            data_base_path = str(project_root / "data" / "daily" / "jp" / "tse stocks")
+
         self.data_base_path = data_base_path
         self.df = None
         self.ticker = None
@@ -219,7 +223,8 @@ def interactive_stock_selector() -> Optional[str]:
         
         if ticker.lower() == 'list':
             print("\nSearching for available stocks...")
-            data_base_path = "/Users/ryo_murakami/CodingProject/AIProject/AI_VaRsystem_dev_test/data/daily/jp/tse stocks"
+            project_root = Path(__file__).resolve().parent
+            data_base_path = str(project_root / "data" / "daily" / "jp" / "tse stocks")
             
             stocks = []
             for subdir in ['1', '2']:
