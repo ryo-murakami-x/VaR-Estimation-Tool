@@ -6,7 +6,7 @@ Complete guide for downloading CSV files from Stooq and setting them up for the 
 
 1. [Quick Start](#quick-start)
 2. [Detailed Instructions](#detailed-instructions)
-3. [Directory Structure](#directory-structure)
+3. [Data Requirements](#data-requirements)
 4. [File Format Requirements](#file-format-requirements)
 5. [Troubleshooting](#troubleshooting)
 6. [Batch Download](#batch-download)
@@ -15,7 +15,7 @@ Complete guide for downloading CSV files from Stooq and setting them up for the 
 
 ## Quick Start
 
-**TL;DR**: Download CSV files from [Stooq Historical Data](https://stooq.com/db/h/) → rename to `{ticker}.jp.txt` → place in `data/daily/jp/tse stocks/` → run the tool
+**TL;DR**: Download CSV files from [Stooq Historical Data](https://stooq.com/db/h/) and use them directly in the tool (no manual directory organization steps required).
 
 ---
 
@@ -82,64 +82,14 @@ After downloading, **verify the file contains**:
 
 ---
 
-## Directory Structure
+## Data Requirements
 
-### Expected Local Directory Layout
-
-```
-AI_VaRsystem_dev_test/
-├── data/
-│   └── daily/
-│       └── jp/
-│           └── tse stocks/
-│               ├── 1/
-│               │   ├── 1301.jp.txt
-│               │   ├── 1305.jp.txt
-│               │   ├── 1306.jp.txt
-│               │   └── ... more stocks
-│               ├── 2/
-│               │   ├── 2001.jp.txt
-│               │   ├── 2002.jp.txt
-│               │   ├── 2009.jp.txt
-│               │   └── ... more stocks
-│               └── tse etfs/
-│                   ├── 1305.jp.txt
-│                   └── ... ETF files
-```
-
-### How to Create Directory Structure
-
-**On macOS/Linux**:
-```bash
-cd /path/to/AI_VaRsystem_dev_test
-mkdir -p data/daily/jp/tse\ stocks/{1,2}
-```
-
-**On Windows**:
-```batch
-cd path\to\AI_VaRsystem_dev_test
-mkdir data\daily\jp\tse stocks\1
-mkdir data\daily\jp\tse stocks\2
-```
+No manual folder creation, file moving, or renaming workflow is required in this guide.
+Focus on downloading valid CSV data and confirming its format.
 
 ---
 
 ## File Format Requirements
-
-### Naming Convention
-
-**Format**: `{TICKER}.jp.txt`
-
-**Examples**:
-- Toyota: `1301.jp.txt`
-- Nippon Life: `1332.jp.txt`
-- Nippon Steel: `2001.jp.txt`
-- ETF example: `1305.jp.txt` (in tse etfs folder)
-
-**Important**:
-- All lowercase for extension: `.jp.txt` (NOT `.JP.TXT`)
-- Ticker code must be exactly as it appears (no spaces)
-- For hexadecimal tickers like `130a`: keep as `130a.jp.txt` (lowercase)
 
 ### CSV Format
 
@@ -175,31 +125,6 @@ For accurate VaR calculations, ensure:
 
 ---
 
-## File Placement Examples
-
-### Example 1: Adding Toyota Stock (1301)
-
-1. Download from Stooq: `1301.csv` or `1301_Daily.csv`
-2. Rename to: `1301.jp.txt`
-3. Move to: `data/daily/jp/tse stocks/1/1301.jp.txt`
-
-```bash
-# Terminal commands:
-mv ~/Downloads/1301.csv ~/AI_VaRsystem_dev_test/data/daily/jp/tse\ stocks/1/1301.jp.txt
-```
-
-### Example 2: Adding Multiple Stocks
-
-```bash
-# Move multiple downloaded files
-cd ~/Downloads
-mv 1305.csv ~/AI_VaRsystem_dev_test/data/daily/jp/tse\ stocks/1/1305.jp.txt
-mv 2001.csv ~/AI_VaRsystem_dev_test/data/daily/jp/tse\ stocks/2/2001.jp.txt
-mv 2002.csv ~/AI_VaRsystem_dev_test/data/daily/jp/tse\ stocks/2/2002.jp.txt
-```
-
----
-
 ## Batch Download
 
 ### Downloading Multiple Stocks Efficiently
@@ -210,14 +135,13 @@ mv 2002.csv ~/AI_VaRsystem_dev_test/data/daily/jp/tse\ stocks/2/2002.jp.txt
 2. Select multiple stocks (if checkbox available)
 3. Choose "Download All" or similar option
 4. Download will be a ZIP file
-5. Extract and rename files according to naming convention
+5. Extract files and use the data directly
 
 **Method 2: Using Browser Extensions**
 
 - Use "Download Manager" or "Batch Download" browser extensions
 - Create a list of URLs from Stooq
 - Let the extension download all files
-- Rename them in batch using your operating system
 
 **Method 3: Automated Script (Optional)**
 
@@ -249,12 +173,12 @@ for ticker in stocks:
 
 ### Problem 1: "Stock data file not found for ticker: 1301"
 
-**Cause**: File is not in the expected location
+**Cause**: The downloaded file is unavailable to the tool.
 
 **Solution**:
-1. Verify file exists: `data/daily/jp/tse stocks/1/1301.jp.txt` OR `data/daily/jp/tse stocks/2/1301.jp.txt`
-2. Check file name is exactly: `1301.jp.txt` (lowercase extension)
-3. Verify file is not corrupted (open in text editor to check format)
+1. Confirm the CSV file was downloaded successfully.
+2. Verify the file can be opened locally.
+3. Re-download the file from Stooq if needed.
 
 ### Problem 2: "Failed to parse CSV file"
 
@@ -268,7 +192,7 @@ for ticker in stocks:
 
 ### Problem 3: Data Not Loading in Application
 
-**Cause**: File location or format issue
+**Cause**: Data format issue or unreadable file
 
 **Solution**:
 1. Run command-line test:
@@ -278,15 +202,7 @@ for ticker in stocks:
    - Enter ticker: `1301`
    - This will show if file is found and readable
 
-2. Check file permissions:
-   ```bash
-   # macOS/Linux:
-   ls -la data/daily/jp/tse\ stocks/1/1301.jp.txt
-   # Should show readable permission (r)
-   
-   # If not readable, fix with:
-   chmod 644 data/daily/jp/tse\ stocks/1/1301.jp.txt
-   ```
+2. Ensure the downloaded CSV is readable and not locked by another app.
 
 ### Problem 4: "Invalid Date Format"
 
@@ -299,13 +215,12 @@ for ticker in stocks:
 
 ### Problem 5: GUI Says "No Data Available"
 
-**Cause**: Application can't find any stock files
+**Cause**: No valid downloaded stock data is currently available.
 
 **Solution**:
-1. Verify directory structure is correct
-2. Ensure subdirectories `1` and `2` exist under `tse stocks`
-3. Place at least one test file: `data/daily/jp/tse stocks/1/1301.jp.txt`
-4. Restart the application
+1. Download at least one stock CSV from Stooq.
+2. Verify it includes required Stooq columns.
+3. Restart the application.
 
 ---
 
@@ -331,25 +246,6 @@ df.to_csv('1301_yahoo.csv')
 
 ### 4. **Other CSV providers**
 - Ensure CSV has at least: Date, Open, High, Low, Close, Volume columns
-- Rename to `.jp.txt` format
-- Place in appropriate directory
-
----
-
-## Quick Reference: Data Directory Locations
-
-### Automatically Used by Application
-
-```
-AI_VaRsystem_dev_test/data/daily/jp/tse stocks/{1,2}/*.jp.txt
-```
-
-### Example Relative Paths
-
-```
-data/daily/jp/tse stocks/1/1301.jp.txt
-data/daily/jp/tse stocks/2/2001.jp.txt
-```
 
 ---
 
@@ -358,11 +254,6 @@ data/daily/jp/tse stocks/2/2001.jp.txt
 Before using data in the VaR tool:
 
 - [ ] Downloaded CSV files from https://stooq.com/db/h/
-- [ ] Renamed files to `{ticker}.jp.txt` format
-- [ ] Created directory: `data/daily/jp/tse stocks/`
-- [ ] Created subdirectories: `1/` and `2/`
-- [ ] Placed ticker 1xxx files in `1/` subdirectory
-- [ ] Placed ticker 2xxx files in `2/` subdirectory
 - [ ] Verified file format contains `<CLOSE>` column
 - [ ] Verified date format is YYYYMMDD
 - [ ] Files are readable (no permission issues)
@@ -404,10 +295,9 @@ If you encounter issues:
 
 1. Visit: **https://stooq.com/db/h/**
 2. Download CSV files for TSE stocks
-3. Rename to: `{ticker}.jp.txt`
-4. Place in: `data/daily/jp/tse stocks/{1 or 2}/`
-5. Run: `python3 main.py`
-6. Select ticker and click "Load Data"
+3. Verify CSV format includes required Stooq columns
+4. Run: `python3 main.py`
+5. Select ticker and click "Load Data"
 
 That's it! Your data is ready for VaR analysis.
 

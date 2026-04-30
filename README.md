@@ -53,27 +53,7 @@ Before using the application, you need to download CSV files from Stooq.
 1. **Visit Stooq Historical Data**: https://stooq.com/db/h/
 2. **Select TSE (Tokyo Stock Exchange)** stocks
 3. **Download CSV files** for desired stock tickers (e.g., 1301, 1332, 2001)
-4. **Organize files** in the correct directory structure
-
-### File Setup
-
-```bash
-# Create directory structure
-mkdir -p data/daily/jp/tse stocks/{1,2}
-
-# Rename and move downloaded CSV files
-# Format: {ticker}.jp.txt
-# Example: 1301.csv → 1301.jp.txt
-
-mv ~/Downloads/1301.csv data/daily/jp/tse stocks/1/1301.jp.txt
-mv ~/Downloads/2001.csv data/daily/jp/tse stocks/2/2001.jp.txt
-```
-
-### File Organization
-
-Place files in appropriate subdirectories:
-- **1/**: For tickers starting with 1 (1001-1999)
-- **2/**: For tickers starting with 2 (2000-2999)
+4. **Use downloaded files directly** (no manual directory organization steps required)
 
 ### Expected File Format
 
@@ -289,7 +269,7 @@ Entry point for launching the GUI application
 
 ### Issue: Stock data file not found
 - Verify ticker code is correct
-- Check data directory structure
+- Verify downloaded CSV data is available and readable
 - Use 'list' command in data_reader.py to see available stocks
 
 ### Issue: GUI doesn't appear
