@@ -55,22 +55,22 @@ def test_data_reader():
         success, message, df = reader.load_stock_data(ticker)
         
         if success:
-            print(f"  ✓ {message}")
+            print(f"  [PASS] {message}")
             
             # Validate data
             is_valid, issues = reader.validate_data()
             if is_valid:
-                print(f"  ✓ Data validation passed")
+                print("  [PASS] Data validation passed")
             else:
-                print(f"  ✗ Validation issues: {issues}")
+                print(f"  [FAIL] Validation issues: {issues}")
             
             # Get summary
             summary = reader.get_summary_info()
             print(f"  - Records: {summary['records']}")
             print(f"  - Date range: {summary['start_date']} to {summary['end_date']}")
-            print(f"  - Current price: ¥{df['CLOSE'].iloc[-1]:.2f}")
+            print(f"  - Current price: JPY {df['CLOSE'].iloc[-1]:.2f}")
         else:
-            print(f"  ✗ Failed: {message}")
+            print(f"  [FAIL] Failed: {message}")
             return False
     
     return True
@@ -92,16 +92,16 @@ def test_var_calculator():
     if available_tickers:
         success, message, df = reader.load_stock_data(available_tickers[0])
         if not success:
-            print(f"  ✗ Failed to load data: {message}")
+            print(f"  [FAIL] Failed to load data: {message}")
             return False
-        print(f"  ✓ Loaded {len(df)} records")
+        print(f"  [PASS] Loaded {len(df)} records")
         daily_returns = (reader.get_daily_returns() / 100).dropna()
         current_price = float(df['CLOSE'].iloc[-1])
     else:
-        print("  ! No local stock files found. Using synthetic returns for VaR test.")
+        print("  [INFO] No local stock files found. Using synthetic returns for VaR test.")
         daily_returns = get_synthetic_returns()
     
-    print(f"  - Current price: ¥{current_price:.2f}")
+    print(f"  - Current price: JPY {current_price:.2f}")
     print(f"  - Mean daily return: {daily_returns.mean():.4f}%")
     print(f"  - Daily volatility: {daily_returns.std():.4f}%")
     
@@ -129,7 +129,7 @@ def test_var_calculator():
         # Dollar VaR for 1M portfolio
         portfolio = 1000000
         var_dollar = abs(var_calc.calculate_var_dollar_terms(results.var_95, portfolio))
-        print(f"    Dollar VaR (1M ¥): ¥{var_dollar:,.2f}")
+        print(f"    Dollar VaR (1M JPY): JPY {var_dollar:,.2f}")
     
     return True
 
@@ -151,23 +151,23 @@ def test_integration():
         reader = StooqDataReader()
         success, message, df = reader.load_stock_data(ticker)
         if not success:
-            print(f"   ✗ Failed: {message}")
+            print(f"   [FAIL] Failed: {message}")
             return False
-        print(f"   ✓ Loaded {len(df)} records")
+        print(f"   [PASS] Loaded {len(df)} records")
 
         # Prepare data
         print("\n2. Preparing data...")
         daily_returns = (reader.get_daily_returns() / 100).dropna()
         current_price = float(df['CLOSE'].iloc[-1])
-        print(f"   ✓ Current price: ¥{current_price:.2f}")
-        print(f"   ✓ Historical volatility: {(daily_returns.std() * 100):.4f}%")
+        print(f"   [PASS] Current price: JPY {current_price:.2f}")
+        print(f"   [PASS] Historical volatility: {(daily_returns.std() * 100):.4f}%")
     else:
-        print("   ! No local stock files found. Using synthetic returns.")
+        print("   [INFO] No local stock files found. Using synthetic returns.")
         print("\n2. Preparing data...")
         daily_returns = get_synthetic_returns()
         current_price = 100.0
-        print(f"   ✓ Synthetic base price: ¥{current_price:.2f}")
-        print(f"   ✓ Synthetic volatility: {(daily_returns.std() * 100):.4f}%")
+        print(f"   [PASS] Synthetic base price: JPY {current_price:.2f}")
+        print(f"   [PASS] Synthetic volatility: {(daily_returns.std() * 100):.4f}%")
     
     # Calculate VaR
     print("\n3. Calculating VaR...")
@@ -178,7 +178,7 @@ def test_integration():
         num_simulations=10000,
         time_horizon=10
     )
-    print(f"   ✓ Completed 10,000 simulations")
+    print("   [PASS] Completed 10,000 simulations")
     
     # Display comprehensive results
     print("\n4. VaR Results (10-day horizon):")
@@ -201,13 +201,13 @@ def test_integration():
     print(f"   - Kurtosis: {metrics['kurtosis']:.6f}")
     
     # Interpretation
-    print(f"\n6. Risk Interpretation (¥1,000,000 portfolio):")
+    print("\n6. Risk Interpretation (JPY 1,000,000 portfolio):")
     portfolio = 1000000
     var_dollar_95 = abs(var_calc.calculate_var_dollar_terms(results.var_95, portfolio))
     var_dollar_99 = abs(var_calc.calculate_var_dollar_terms(results.var_99, portfolio))
     
-    print(f"   95% confidence: Maximum loss ¥{var_dollar_95:,.2f} in 10 days")
-    print(f"   99% confidence: Maximum loss ¥{var_dollar_99:,.2f} in 10 days")
+    print(f"   95% confidence: Maximum loss JPY {var_dollar_95:,.2f} in 10 days")
+    print(f"   99% confidence: Maximum loss JPY {var_dollar_99:,.2f} in 10 days")
     
     return True
 
@@ -230,7 +230,7 @@ def main():
             result = test_func()
             results[test_name] = "PASS" if result else "FAIL"
         except Exception as e:
-            print(f"\n  ✗ Exception: {str(e)}")
+            print(f"\n  [ERROR] Exception: {str(e)}")
             results[test_name] = "ERROR"
     
     # Summary
@@ -238,18 +238,18 @@ def main():
     print("TEST SUMMARY")
     print("="*70)
     for test_name, result in results.items():
-        status_symbol = "✓" if result == "PASS" else "✗"
+        status_symbol = "[PASS]" if result == "PASS" else "[FAIL]"
         print(f"{status_symbol} {test_name}: {result}")
     
     all_passed = all(r == "PASS" for r in results.values())
     
     print("\n" + "="*70)
     if all_passed:
-        print("✓ All tests passed successfully!")
+        print("[PASS] All tests passed successfully!")
         print("\nThe VaR Estimation Tool is ready to use.")
         print("Run 'python3 main.py' to launch the GUI application.")
     else:
-        print("✗ Some tests failed. Please review the output above.")
+        print("[FAIL] Some tests failed. Please review the output above.")
     print("="*70 + "\n")
     
     return all_passed

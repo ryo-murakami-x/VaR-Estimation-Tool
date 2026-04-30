@@ -41,13 +41,13 @@ jobs:
       run: python integration_test.py
     
     - name: Test data reader module
-      run: python -c "from data_reader import StooqDataReader; print('✓ Data reader module imports correctly')"
+      run: python -c "from data_reader import StooqDataReader; print('Data reader module imports correctly')"
     
     - name: Test VaR calculator module
-      run: python -c "from var_calculator import MonteCarloVaR; print('✓ VaR calculator module imports correctly')"
+      run: python -c "from var_calculator import MonteCarloVaR; print('VaR calculator module imports correctly')"
     
     - name: Test GUI module (import only)
-      run: python -c "from var_gui import VaREstimationGUI; print('✓ GUI module imports correctly')"
+      run: python -c "from var_gui import VaREstimationGUI; print('GUI module imports correctly')"
 
   code-quality:
     runs-on: ubuntu-latest
@@ -92,7 +92,7 @@ jobs:
         if [ ! -f "README.md" ]; then exit 1; fi
         if [ ! -f "QUICKSTART.md" ]; then exit 1; fi
         if [ ! -f "INSTALLATION.md" ]; then exit 1; fi
-        echo "✓ All documentation files present"
+        echo "All documentation files present"
     
     - name: Validate markdown
       run: |
