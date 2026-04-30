@@ -344,11 +344,11 @@ df.to_csv('1301_yahoo.csv')
 AI_VaRsystem_dev_test/data/daily/jp/tse stocks/{1,2}/*.jp.txt
 ```
 
-### Full Path Examples
+### Example Relative Paths
 
 ```
-/Users/ryo_murakami/CodingProject/AIProject/AI_VaRsystem_dev_test/data/daily/jp/tse stocks/1/1301.jp.txt
-/Users/ryo_murakami/CodingProject/AIProject/AI_VaRsystem_dev_test/data/daily/jp/tse stocks/2/2001.jp.txt
+data/daily/jp/tse stocks/1/1301.jp.txt
+data/daily/jp/tse stocks/2/2001.jp.txt
 ```
 
 ---

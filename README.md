@@ -36,7 +36,7 @@ A comprehensive Value at Risk (VaR) estimation tool using Monte Carlo simulation
 
 1. **Clone/Navigate to the project directory:**
 ```bash
-cd /Users/ryo_murakami/CodingProject/AIProject/AI_VaRsystem_dev_test
+cd /path/to/VaR-Estimation-Tool
 ```
 
 2. **Install required packages:**
