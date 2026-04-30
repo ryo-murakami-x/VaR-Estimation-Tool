@@ -396,7 +396,7 @@ Risk Metrics:
 ## 📁 File Manifest
 
 ```
-AI_VaRsystem_dev_test/
+your-project-name/
 ├── data_reader.py              (283 lines) ✅
 ├── var_calculator.py           (344 lines) ✅
 ├── var_gui.py                  (522 lines) ✅

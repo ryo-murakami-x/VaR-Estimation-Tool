@@ -11,7 +11,7 @@ You now have a complete Value at Risk (VaR) estimation system with:
 ## 📁 Project Files
 
 ```
-AI_VaRsystem_dev_test/
+your-project-name/
 ├── data_reader.py              # CSV reader module
 ├── var_calculator.py           # Monte Carlo VaR engine
 ├── var_gui.py                  # GUI application
